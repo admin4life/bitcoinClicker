@@ -1,2 +1,2 @@
-# bitcoinClicker
-JavaScript game teaching about mining
+# Bitcoin Clicker Game 
+Informative game about mining bitcoins

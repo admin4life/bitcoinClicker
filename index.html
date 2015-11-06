@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>New Fun Project</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/style.css">
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve column" style="margin-top:8%">
+        <h5 data-bind="text:clicks"></h5>
+        <h4 data-bind="text:main, style: {color: red() ? 'red' : 'black'}"></h4>
+      </div>
+    </div>
+    <div class="row">
+      <div id="mainDiv" class="one-half column" style="margin-top: 5%;display:none;">
+        <p data-bind="text:message"></a>.</p>
+        <input id="inputString" style="display:none;" data-bind="value:inputString"/>
+        <div id="buttonbox">
+          <button class="button-primary" data-bind="text:buttonText, click:activeFunction"></button>
+          <button class="button-primary" id="cpuminebutton" style="display:none;" data-bind="click:buyCPUMine, enable: bitcoins() >= 50">CPU Miner</button>
+        </div>
+        <div id="blockchain" style="display:none;">
+          <h6>Blockchain</h6>
+          <ul data-bind="foreach:sortblockchain">
+            <li data-bind="text:hash"></li>
+          </ul>
+        </div>
+      </div>
+      <div id="blockBox" class="one-half column" style="margin-top: 5%;display:none;">
+        <h4>Block Inputs</h4>
+        <h6>Transactions</h6>
+        <textarea disable data-bind="value:transactions"></textarea>
+        <h6>Previous Block Hash</h6>
+        <textarea disable data-bind="value:previousHash"></textarea>
+        <h6>Time Stamp</h6>
+        <input disable data-bind="value:timeStamp"/>
+        <h6>Nonce</h6>
+        <input data-bind="value:nonce"/>
+      </div>
+    </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+
+  <script src="js/knockout-3.3.0.js"></script>
+  <script src="js/jquery-2.1.4.min.js"></script>
+  <script src="js/sha256.js"></script>
+  <script src="js/project.js"></script>
+  <!-- Scripts Section
+  __________________________________________________ -->
+</body>
+</html>
