@@ -4,12 +4,13 @@ function vm() {
   var self = this;
 
   self.buttonText = ko.observable();
-  self.clicks = ko.observable(0);
+  self.clicks = ko.observable(90);
   self.main = ko.observable("Hey You!");
   self.buttonText = ko.observable("Click!");
   self.inputString = ko.observable();
   self.name = ko.observable();
   self.red = ko.observable(null);
+  self.runspeed = ko.observable(4000);
   self.previousHash = ko.observable();
   self.timeStamp = ko.observable();
   self.transactions = ko.observable();
@@ -95,7 +96,7 @@ function vm() {
           self.red(null);
           self.timeStamp(new Date());
           self.nonce(Math.random());
-          var obj = {"PreviousHash":self.previousHash(),"Transactions":self.transactions(),"TimeStamp":self.timeStamp(),"Nonce":self.nonce()}
+          var obj = {"PreviousHash":self.previousHash(),"Transactions":self.transactions(),"TimeStamp":self.timeStamp(),"Nonce":self.nonce()};
           var string = self.previousHash()+self.transactions()+self.timeStamp()+self.nonce();
           var hash = SHA256.hash(string);
           self.main(hash);
@@ -112,8 +113,9 @@ function vm() {
             $("#cpuminebutton").fadeIn("fast");
             self.message("Ok clicking kinda sucks so lets buy a CPU Miner which will use our CPU to mine for us.")
             self.buttonText("Mine!");
+            activate();
             self.activeFunction = clickMine;
-            startEngine();
+            miner.start(clickMine,4000);
           }
         }
         break;
@@ -123,47 +125,70 @@ function vm() {
 
 
   } // end active function
-
   var clickMine = function() {
     self.timeStamp(new Date());
     self.nonce(Math.random());
     var string = self.previousHash()+self.transactions()+self.timeStamp()+self.nonce();
     var hash = SHA256.hash(string);
     self.main(hash);
-    console.log(hash);
-  }
-  function mineBlock() {
-    self.timeStamp(new Date());
-    self.nonce(Math.random());
-    var string = self.previousHash()+self.transactions()+self.timeStamp()+self.nonce();
-    var hash = SHA256.hash(string);
-    self.main(hash);
-    console.log(hash);
   }
 
-  self.runspeed = ko.observable(4000);
-  function startEngine() {
-    setInterval(mineBlock,self.runspeed());
-  }
-  self.hashWatcher = ko.computed(function() {
-    self.main();
-  });
-  self.blockchainWatcher = ko.computed(function() {
-    self.blockchain();
-    self.transactions(transactionFill());
-    self.cur
-    self.bitcoins(self.bitcoins()+25);
-  });
+
+  var miner = {
+    running: false,
+    iv: 5000,
+    timeout: false,
+    cb : function(){},
+    start : function(cb,iv){
+        var elm = this;
+        clearInterval(this.timeout);
+        this.running = true;
+        if(cb) this.cb = cb;
+        if(iv) this.iv = iv;
+        this.timeout = setTimeout(function(){elm.execute(elm)}, this.iv);
+    },
+    execute : function(e){
+        if(!e.running) return false;
+        e.cb();
+        e.start();
+    },
+    stop : function(){
+        this.running = false;
+    },
+    speed : function(iv){
+        clearInterval(this.timeout);
+        this.start(false, iv);
+    }
+};
+
   self.buyCPUMine = function() {
-    if(self.bitcoins() < 50) {return false;}
-    self.runspeed(self.runspeed() - 100);
-    self.bitcoins(self.bitcoins - 50);
+    if(self.bitcoins() < 50) return false;
+    miner.speed(miner.iv - 1000);
+    self.bitcoins(self.bitcoins() - 50);
+    self.clicks("BTC:"+self.bitcoins());
   }
-}
+  function activate() {
+
+    self.hashWatcher = ko.computed(function() {
+      var hash = self.main();
+      if (hash.substring(0,1) == 0){
+        var obj = {"PreviousHash":self.previousHash(),"Transactions":self.transactions(),"TimeStamp":self.timeStamp.peek(),"Nonce":self.nonce.peek()};
+        self.blockchain.push({'hash':hash,'inputs':obj});
+        self.bitcoins(self.bitcoins() + 25);
+        self.clicks("BTC:"+self.bitcoins());
+        self.transactions(transactionFill());
+        self.previousHash(hash);
+        clickMine();
+        console.log("Ran Hash watcher  "+hash);
+      }
+    });
+
+  }// End activate
+} // End View Model
 
 
 function transactionFill() {
-  var names = ["Betty","Tom","Billy","Jamie","Howard","Bonnie","Todd","Unice","Gretchen"];
+  var names = ["Betty","Tom","Billy","Jamie","Howard","Bonnie","Todd","Unice","Gretchen","Ed","Edd","Eddy"];
   var string = "";
   for (var i=0;i<4;i++) {
     string += names[Math.floor(Math.random() * names.length)]+
