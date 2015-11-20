@@ -1,0 +1,44 @@
+<html>
+<body>
+<div style="margin-top:25%;margin-left:50em;">
+<button id="go">Go</button>
+<span id="hash"></span>
+<ul id="chain">
+</ul>
+</div>
+
+
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/sha256.js"></script>
+<script>
+
+
+
+$("#go").on("click",runtime());
+
+function runtime() {
+  var chain = $("#chain");
+  var count=0;
+  var runner=0;
+  var vals = [];
+  setInterval(function(){
+
+    var string = (count+new Date());
+    count++;
+    var hash = SHA256.hash(string);
+    //$('#hash').text(hash);
+    if(hash.substring(0,3) == "000"){
+      chain.append("<li>"+count+" : "+hash+"</li>");
+      vals.push(count-runner);
+      runner = count;
+      var sum=0;
+      for(var i = 0;i<vals.length;i++){sum+=vals[i];}
+      $('#hash').text("Avg hashes "+(sum/vals.length).toFixed(2));
+    };
+
+  },0.01);
+};
+
+</script>
+</body>
+</html>
