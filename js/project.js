@@ -1,10 +1,71 @@
 
 
-function vm() {
+var vm = {
+  clicks:     ko.observable(0),
+  main:       ko.observable("Hey You!"),
+  buttonText: ko.observable("Click!"),
+  inputString:  ko.observable(),
+  name:       ko.observable(),
+  red:        ko.observable(null),
+  previousHash: ko.observable(),
+  transactions: ko.observable(),
+  timeStamp:  ko.observable(),
+  nonce:      ko.observable(),
+  blockchain: ko.observableArray(),
+  bitcoins:   ko.observable(0),
+  message:    ko.observable("Click here to mine some bitcoins!"),
+  runner:     function(){},
+  activeFunction: function(){
+    var cur = list.shift();
+    if(typeof cur.a != 'undefined') {
+      this.message(cur.a);
+    }
+    if(typeof cur.b != 'undefined') {
+      this.runner = cur.b;
+    }
+    this.runner();
+  },
+  buyCPUMine:  function() {
+    if(self.bitcoins() < 50) return false;
+    miner.speed(miner.iv - 1000);
+    self.bitcoins(self.bitcoins() - 50);
+    self.clicks("BTC:"+self.bitcoins());
+  }
+};
+var list = [
+  {a:"Come on we need more clicks, these are bitcoins we are talking about!"},
+  {a:"Yeah, that's it. Clicks are the life blood of bitcoin mining."},
+  {a:"Well not really. Clicks have nothing to do with bitcoin mining."},
+  {a:"Bitcoins are mined by generating something called 'hashes' using a cryptographic function. Bitcoins use a modified SHA256 algorythm."},
+  {a:"This algorythm takes an input like a string of characters or any type of data and processes it using a series of computations in order to generate a uniqe output called a hash."},
+  {a:"Lets take a look at a hash in order to get an idea of what I'm talking about."},
+  {a:"Ok, this string above is the output from 'hashing' the string 'The Quick Brown Fox'. Any time anyone anywhere in the world feeds this exact string into the SHA256 algorythm it will always output this exact same sequence.",
+   b:function() {
+     vm.main(SHA256.hash('The Quick Brown Fox'));
+   }},
+  {a:"This processes is used to provide proof that a document or an application has not been altered or tampered with."},
+  {a:"Let's see an example by changing the input from 'The Quick Brown Fox', to 'The Quick Brown Foxx'",
+   b:function() {
+     vm.main(SHA256.hash('The Quick Brown Foxx'));
+   }},
+  {a:"As you can see the output hash has changed by just changing the input string by one character. Any small modification of the input string will always change the output hash."},
+  {a:"Bitcoin uses this in order to build the blockchain."}
+  {a:"By generating a running sequence of hashes based on known inputs like all the transactions waiting to be confirmed and the hash from the previous 'block'"},
+  {a:"A block is a collection of transactions, a timestamp, the previous hash, and a random number used to change the output hash called the nonce."},
+  {a:"Let's have a look at an example of the inputs that go into building a block before we explain the nonce."},
+  {a:"Here are our block inputs. This is basicly what all miners use in order to 'mine' for bitcoins.",
+   b:function() {
+     $("#blockBox").fadeIn("fast");
+     vm.transactions(transactionFill());
+     vm.timeStamp(new Date());
+   }}
+];
+
+function vmm() {
   var self = this;
 
   self.buttonText = ko.observable();
-  self.clicks = ko.observable(90);
+  self.clicks = ko.observable(0);
   self.main = ko.observable("Hey You!");
   self.buttonText = ko.observable("Click!");
   self.inputString = ko.observable();
@@ -161,7 +222,7 @@ function vm() {
     }
 };
 
-  self.buyCPUMine = function() {
+  buyCPUMine = function() {
     if(self.bitcoins() < 50) return false;
     miner.speed(miner.iv - 1000);
     self.bitcoins(self.bitcoins() - 50);
@@ -201,6 +262,6 @@ function transactionFill() {
 }
 
 $(function() {
-  ko.applyBindings(new vm());
+  ko.applyBindings(vm);
   $("#mainDiv").fadeIn(1700);
 })

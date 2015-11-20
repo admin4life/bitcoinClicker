@@ -50,7 +50,7 @@
         </div>
         <div id="blockchain" style="display:none;">
           <h6>Blockchain</h6>
-          <ul data-bind="foreach:sortblockchain">
+          <ul data-bind="foreach:blockchain.reverse()">
             <li data-bind="text:hash"></li>
           </ul>
         </div>
