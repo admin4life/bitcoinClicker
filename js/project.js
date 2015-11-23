@@ -39,21 +39,21 @@ var list = [
   {a:"Bitcoins are mined by generating something called 'hashes' using a cryptographic function. Bitcoins use a modified SHA256 algorythm."},
   {a:"This algorythm takes an input like a string of characters or any type of data and processes it using a series of computations in order to generate a uniqe output called a hash."},
   {a:"Lets take a look at a hash in order to get an idea of what I'm talking about."},
-  {a:"Ok, this string above is the output from 'hashing' the string 'The Quick Brown Fox'. Any time anyone anywhere in the world feeds this exact string into the SHA256 algorythm it will always output this exact same sequence.",
+  {a:"Ok, this string above is the output from 'hashing' the string 'The Quick Brown Fox'. Any time anyone, anywhere in the world feeds this exact string into the SHA256 algorythm it will always output this exact same sequence.",
    b:function() {
      vm.main(SHA256.hash('The Quick Brown Fox'));
    }},
-  {a:"This processes is used to provide proof that a document or an application has not been altered or tampered with."},
+  {a:"This processes is used to provide proof that a document or an application has not been altered or tampered with, as the resulting hash would be different."},
   {a:"Let's see an example by changing the input from 'The Quick Brown Fox', to 'The Quick Brown Foxx'",
    b:function() {
      vm.main(SHA256.hash('The Quick Brown Foxx'));
    }},
   {a:"As you can see the output hash has changed by just changing the input string by one character. Any small modification of the input string will always change the output hash."},
-  {a:"Bitcoin uses this in order to build the blockchain."}
+  {a:"Bitcoin uses this in order to build the blockchain and make sure that every block checks out."}
   {a:"By generating a running sequence of hashes based on known inputs like all the transactions waiting to be confirmed and the hash from the previous 'block'"},
-  {a:"A block is a collection of transactions, a timestamp, the previous hash, and a random number used to change the output hash called the nonce."},
+  {a:"A block is a collection of a few inputs like the transactions waiting to be confirmed, a timestamp, the previous hash, and a random number used to change the output hash called the nonce."},
   {a:"Let's have a look at an example of the inputs that go into building a block before we explain the nonce."},
-  {a:"Here are our block inputs. This is basicly what all miners use in order to 'mine' for bitcoins.",
+  {a:"Here are our block inputs. This is a simplified example of what all miners use in order to 'mine' for bitcoins.",
    b:function() {
      $("#blockBox").fadeIn("fast");
      vm.transactions(transactionFill());
